@@ -21,6 +21,8 @@ import org.testng.annotations.Listeners;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.framework.data.Constants.LOCALHOST;
 import static com.framework.util.Await.getInitializedAwait;
@@ -32,6 +34,7 @@ import static io.restassured.http.ContentType.JSON;
 import static io.restassured.module.jsv.JsonSchemaValidator.settings;
 import static java.lang.String.valueOf;
 import static java.lang.System.getenv;
+import static java.util.Collections.singletonList;
 
 @Listeners(BaseTest.class)
 public class BaseTest implements ITestListener, IInvokedMethodListener {
@@ -106,7 +109,14 @@ public class BaseTest implements ITestListener, IInvokedMethodListener {
     private void getRemoteDriver(ITestContext context) throws MalformedURLException {
 
         ChromeOptions chromeOptions = new ChromeOptions();
+        Map<String, Object> prefs = new HashMap<String, Object>();
+
+        prefs.put("credentials_enable_service", false);
+        prefs.put("profile.password_manager_enabled", false);
+
         chromeOptions.setCapability("se:name", context.getName());
+        chromeOptions.setExperimentalOption("excludeSwitches", singletonList("enable-automation"));
+        chromeOptions.setExperimentalOption("prefs", prefs);
 
         host = getenv("HUB_HOST") != null ? getenv("HUB_HOST") : LOCALHOST;
 
