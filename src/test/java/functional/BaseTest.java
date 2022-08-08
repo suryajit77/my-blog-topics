@@ -18,16 +18,17 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.framework.data.Constants.LOCALHOST;
+import static com.assertthat.selenium_shutterbug.core.Capture.VIEWPORT;
+import static com.assertthat.selenium_shutterbug.core.Shutterbug.shootPage;
+import static com.framework.data.Constants.*;
 import static com.framework.util.Await.getInitializedAwait;
 import static com.github.fge.jsonschema.SchemaVersion.DRAFTV4;
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.saasquatch.jsonschemainferrer.SpecVersion.DRAFT_04;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
@@ -48,7 +49,6 @@ public class BaseTest implements ITestListener, IInvokedMethodListener {
     protected static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
     protected static final ThreadLocal<ITestNGMethod> currentMethods = new ThreadLocal<>();
     protected static final ThreadLocal<ITestResult> currentResults = new ThreadLocal<>();
-    protected static final LocalDateTime currentTime = LocalDateTime.now();
 
     protected static final String HRM_USERNAME = System.getenv("HRM_USERNAME");
     protected static final String HRM_PASSWORD = System.getenv("HRM_PASSWORD");
@@ -82,13 +82,15 @@ public class BaseTest implements ITestListener, IInvokedMethodListener {
                 .and().with().checkedValidation(true);
 
         validator = jsonSchemaFactory.getValidator();
+
+        ALL_PROJECT_DIR_PATHS.forEach(filepath -> new File(filepath).mkdirs());
     }
 
 
     @BeforeClass
     public void beforeClassSetup(ITestContext context) throws MalformedURLException {
 
-        if (context.getName().equalsIgnoreCase("UI Regression")) {
+        if (isUIRegression(context)) {
             getRemoteDriver(context);
             initPageObjects();
         }
@@ -98,7 +100,7 @@ public class BaseTest implements ITestListener, IInvokedMethodListener {
     @AfterSuite
     public void tearDownDriver(ITestContext context) {
 
-        if (context.getName().equalsIgnoreCase("UI Regression")) {
+        if (isUIRegression(context)) {
             if (null != this.driver.get()) {
                 this.driver.get().quit();
             }
@@ -133,7 +135,6 @@ public class BaseTest implements ITestListener, IInvokedMethodListener {
         logger.info("Window Size: " + driver.get().manage().window().getSize().getHeight() + "x" + driver.get().manage().window().getSize().getWidth());
     }
 
-
     private Boolean getGridAvailability(String host){
         return given().contentType(JSON)
                 .when().get(("http://").concat(host).concat(":4444/wd/hub/status"))
@@ -141,13 +142,24 @@ public class BaseTest implements ITestListener, IInvokedMethodListener {
                 .toString().equalsIgnoreCase("Selenium Grid ready.");
     }
 
-
     private void initPageObjects() {
         homePage = new HomePage(driver.get());
         loginPage = new LoginPanelPage(driver.get());
         menuNavigation = new MenuNavigationPage(driver.get());
         dashboardPage = new DashboardPage(driver.get());
         systemUserPage = new SystemUserPage(driver.get());
+    }
+
+    private boolean isUIRegression(ITestContext context) {
+        return context.getName().equalsIgnoreCase("UI Regression");
+    }
+
+    public void takeScreenshot(ITestResult result, String directoryPath ){
+        if (isUIRegression(result.getTestContext()) && this.driver.get() != null) {
+            shootPage(this.driver.get(), VIEWPORT,true)
+                    .withName(result.getMethod().getMethodName())
+                    .save(directoryPath + LOCAL_DATE_NOW.format(DATE_FORMAT));
+        }
     }
 
 
@@ -162,17 +174,6 @@ public class BaseTest implements ITestListener, IInvokedMethodListener {
     public void afterInvocation(IInvokedMethod method, ITestResult testResult) {
         currentMethods.remove();
         currentResults.remove();
-    }
-
-
-    public static ITestResult getTestResult() {
-        return checkNotNull(currentResults.get(),
-                "Did you forget to register the %s listener?", BaseTest.class.getName());
-    }
-
-    public static ITestNGMethod getTestMethod() {
-        return checkNotNull(currentMethods.get(),
-                "Did you forget to register the %s listener?", BaseTest.class.getName());
     }
 
 
@@ -191,6 +192,8 @@ public class BaseTest implements ITestListener, IInvokedMethodListener {
 
         logger.info("Test Status: Passed");
         logger.info("************************");
+
+        takeScreenshot(result, PASSED_SCREENSHOTS_DIR_PATH);
     }
 
 
@@ -200,6 +203,8 @@ public class BaseTest implements ITestListener, IInvokedMethodListener {
         logger.info("Test Status: Failed");
         logger.error(result.getThrowable().getMessage());
         logger.info("************************");
+
+        takeScreenshot(result, FAILED_SCREENSHOTS_DIR_PATH);
     }
 
 
