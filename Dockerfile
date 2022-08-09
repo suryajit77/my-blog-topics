@@ -24,8 +24,8 @@ FROM fabric8/java-alpine-openjdk11-jre AS testrun
 RUN mkdir -p /jar
 WORKDIR /jar/
 
-COPY --from=package /app/target/dockerized.jar              .
-COPY --from=package /app/target/dockerized-tests.jar        .
+COPY --from=package /app/target/lite-dockerized.jar              .
+COPY --from=package /app/target/lite-dockerized-tests.jar        .
 COPY --from=package /app/target/libs                        ./libs
 COPY testng.xml                                             .
 COPY src/main/resources/application.properties              ./src/main/resources/application.properties

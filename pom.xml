@@ -184,7 +184,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>dockerized</finalName>
+        <finalName>lite-dockerized</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

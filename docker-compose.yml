@@ -23,7 +23,7 @@ services:
       - VNC_NO_PASSWORD=1
 
   test-run:
-    build: .
+    image: suryajit7/lite-dockerized:latest
     container_name: test-run
     depends_on:
       - chrome
