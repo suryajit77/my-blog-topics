@@ -38,5 +38,5 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ubuntu-build, windows-build, mac-build]
     steps:
-      - name: Final Step
-        run: echo Final step completed...
+      - name: Python Syntax Checker
+        uses: cclauss/Find-Python-syntax-errors-action@v0.2.0
