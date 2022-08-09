@@ -28,3 +28,17 @@ jobs:
 
       - name: Step two
         run: "Get-ChildItem Env: | Sort-Object Name"
+
+
+  mac-build:
+    runs-on: macos-latest
+    steps:
+      - name: Step one
+        uses: actions/checkout@v3
+
+  display:
+    runs-on: ubuntu-latest
+    needs: [ubuntu-build, windows-build, mac-build]
+    steps:
+      - name: Final Step
+        run: echo Final step completed...
