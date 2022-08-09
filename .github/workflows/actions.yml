@@ -15,7 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Step one
-        run: echo Executing Step one...
         uses: actions/checkout@v3
 
       - name: Step two
@@ -25,7 +24,6 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Step one
-        run: echo Executing Step one on windows machine...
         uses: actions/checkout@v3
 
       - name: Step two
