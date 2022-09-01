@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static java.lang.System.getenv;
+
 /**
  * All framework related constants which are not defined in application.properties.
  */
@@ -18,6 +20,11 @@ public class Constants {
 
     public static final LocalDate LOCAL_DATE_NOW = LocalDate.now();
     public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("ddLLLLyyyy");
+
+    public static final String APP_USERNAME = getenv("APP_USERNAME");
+    public static final String APP_PASSWORD = getenv("APP_PASSWORD");
+    public static final String APP_POOL_ID = getenv("APP_POOL_ID");
+    public static final String APP_CLIENT_ID = getenv("APP_CLIENT_ID");
 
     //Framework related directory paths
     public static final String PROJECT_ROOT_DIR = Paths.get(".").normalize().toAbsolutePath().toString();
