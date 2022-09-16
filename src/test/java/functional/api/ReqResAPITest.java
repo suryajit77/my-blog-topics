@@ -7,7 +7,7 @@ import functional.BaseTest;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
-import static com.framework.util.AssertWebService.assertThat;
+import static com.framework.util.testhelper.AssertWebService.assertThat;
 import static org.apache.http.HttpStatus.SC_CREATED;
 
 public class ReqResAPITest extends BaseTest {

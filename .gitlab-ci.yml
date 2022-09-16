@@ -12,7 +12,7 @@ docker-test:
 
   script:
     - apk add tree
-    - docker-compose up -d --build --scale chrome=2
+    - docker-compose up -d --build --scale chrome=3
     - docker wait test-run
     - chmod +x ./script.sh
     - ./script.sh

@@ -1,6 +1,7 @@
 package functional;
 
 
+import com.assertthat.selenium_shutterbug.core.Snapshot;
 import com.framework.page.site.*;
 import com.framework.util.AsyncService;
 import com.github.fge.jsonschema.cfg.ValidationConfiguration;
@@ -9,6 +10,7 @@ import com.github.fge.jsonschema.main.JsonValidator;
 import com.saasquatch.jsonschemainferrer.*;
 import io.restassured.module.jsv.JsonSchemaValidatorSettings;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.LoggerFactory;
@@ -25,10 +27,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.assertthat.selenium_shutterbug.core.Capture.VIEWPORT;
+import static com.assertthat.selenium_shutterbug.core.Shutterbug.shootElementVerticallyCentered;
 import static com.assertthat.selenium_shutterbug.core.Shutterbug.shootPage;
 import static com.framework.data.Constants.*;
-import static com.framework.util.Await.getInitializedAwait;
+import static com.framework.util.Await.*;
 import static com.github.fge.jsonschema.SchemaVersion.DRAFTV4;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.saasquatch.jsonschemainferrer.SpecVersion.DRAFT_04;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
@@ -58,6 +62,7 @@ public class BaseTest implements ITestListener, IInvokedMethodListener {
     protected MenuNavigationPage menuNavigation;
     protected DashboardPage dashboardPage;
     protected SystemUserPage systemUserPage;
+    protected GooglePage googlePage;
 
     protected static final JsonSchemaInferrer jsonSchemaInferrer = JsonSchemaInferrer.newBuilder()
             .setSpecVersion(DRAFT_04)
@@ -116,7 +121,7 @@ public class BaseTest implements ITestListener, IInvokedMethodListener {
         prefs.put("credentials_enable_service", false);
         prefs.put("profile.password_manager_enabled", false);
 
-        chromeOptions.setCapability("se:name", context.getName());
+        chromeOptions.setCapability("se:name", getTestResult().getTestClass().getRealClass().getSimpleName());
         chromeOptions.setExperimentalOption("excludeSwitches", singletonList("enable-automation"));
         chromeOptions.setExperimentalOption("prefs", prefs);
 
@@ -148,6 +153,8 @@ public class BaseTest implements ITestListener, IInvokedMethodListener {
         menuNavigation = new MenuNavigationPage(driver.get());
         dashboardPage = new DashboardPage(driver.get());
         systemUserPage = new SystemUserPage(driver.get());
+        googlePage = new GooglePage(driver.get());
+
     }
 
     private boolean isUIRegression(ITestContext context) {
@@ -160,6 +167,34 @@ public class BaseTest implements ITestListener, IInvokedMethodListener {
                     .withName(result.getMethod().getMethodName())
                     .save(directoryPath + LOCAL_DATE_NOW.format(DATE_FORMAT));
         }
+    }
+
+    public Snapshot takeWebElementScreenshot(WebElement element){
+        awaitUntil(elementIsDisplayed, element);
+        return shootElementVerticallyCentered(this.driver.get(), element,true);
+    }
+
+
+    public void takeWebElementScreenshot(ITestResult result, WebElement element){
+        awaitUntil(elementIsDisplayed, element);
+        shootElementVerticallyCentered(this.driver.get(), element,true)
+                .withName(result.getMethod().getMethodName())
+                .save(EXPECTED_SCREENSHOTS_DIR_PATH.concat(result.getTestClass().getRealClass().getSimpleName()));
+    }
+
+
+    public static ITestNGMethod getTestMethod() {
+        return checkNotNull(currentMethods.get(),
+                "Did you forget to register the %s listener?", BaseTest.class.getName());
+    }
+
+
+    /**
+     * Parameters passed from a data provider are accessible in the test result.
+     */
+    public static ITestResult getTestResult() {
+        return checkNotNull(currentResults.get(),
+                "Did you forget to register the %s listener?", BaseTest.class.getName());
     }
 
 

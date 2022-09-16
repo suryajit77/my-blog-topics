@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
 
 import static com.framework.page.site.MenuOption.USERS;
 import static com.framework.page.site.UserRole.ESS;
-import static com.framework.util.AssertWebElement.assertThat;
+import static com.framework.util.testhelper.AssertWebElement.assertThat;
 
 public class DashboardTest extends BaseTest {
 

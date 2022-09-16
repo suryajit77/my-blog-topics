@@ -1,4 +1,4 @@
-package com.framework.util;
+package com.framework.util.testhelper;
 
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.AbstractAssert;

@@ -1,5 +1,6 @@
 package com.framework.page;
 
+import com.framework.util.Await;
 import lombok.Getter;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -53,6 +54,14 @@ public abstract class BasePage {
     waitForPageToLoad();
     this.driver.close();
     logger.info("Quiting browser instance.");
+    return this;
+  }
+
+
+  public BasePage click(WebElement element) {
+    Await.awaitUntil(Await.elementIsDisplayed, element);
+    element.click();
+    logger.info(("Clicking WebElement: ").concat(element.getText()));
     return this;
   }
 

@@ -1,4 +1,4 @@
-package com.framework.util;
+package com.framework.util.testhelper;
 
 
 import io.restassured.response.Response;

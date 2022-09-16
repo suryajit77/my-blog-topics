@@ -41,6 +41,8 @@ Go to root directory and open any CLI and run the below command.
 15. Liquibase Migration with AWS Aurora RDS
 16. Aspect Oriented Programming with AWS Lambda Functions
 17. Reactive Programming In Test Automation
+18. Visual Assertion in UI Tests ![](doc/check-mark.png)
+    **_https://medium.com/@suryajit7/visual-assertions-in-ui-tests-c17d8544acb1_**
 
 ## **Credits & Links:**
 
