@@ -104,7 +104,7 @@ public abstract class BasePage {
 
   public BasePage waitForPageToLoad() {
     wait.until((ExpectedCondition) webDriver -> ((JavascriptExecutor) webDriver).executeScript("return document.readyState").toString().equalsIgnoreCase("complete")
-            || ((Boolean) ((JavascriptExecutor) webDriver).executeScript("return jQuery.active == 0")));
+            || ((Boolean) ((JavascriptExecutor) webDriver).executeScript("jQuery.active === 0 && Object.keys(window.testing.timeouts).length === 0 && window.testing.intervals.length === 0;")));
     return this;
   }
 
@@ -141,6 +141,7 @@ public abstract class BasePage {
   public WebElement getDynamicWebElement(String locator, String newString1, String... newString2) {
     return this.driver.findElement(By.xpath(String.format(locator, newString1, newString2)));
   }
+
 
 
   public BasePage dragAndDropWebElement(WebElement source, WebElement destination) {

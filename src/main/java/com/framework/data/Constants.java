@@ -33,8 +33,9 @@ public class Constants {
     public static final String FAILED_SCREENSHOTS_DIR_PATH = PROJECT_ROOT_DIR.concat("/screenshots/failed/");
     public static final String DIFFERENCE_SCREENSHOTS_DIR_PATH = PROJECT_ROOT_DIR.concat("/screenshots/difference/");
     public static final String EXPECTED_SCREENSHOTS_DIR_PATH = PROJECT_ROOT_DIR.concat("/screenshots/expected/");
+    public static final String TEMP_SCREENSHOTS_DIR_PATH = PROJECT_ROOT_DIR.concat("/screenshots/temporary/");
     public static final List<String> ALL_PROJECT_DIR_PATHS = List.of(SCREENSHOTS_DIRECTORY, PASSED_SCREENSHOTS_DIR_PATH,
-            FAILED_SCREENSHOTS_DIR_PATH, EXPECTED_SCREENSHOTS_DIR_PATH, DIFFERENCE_SCREENSHOTS_DIR_PATH);
+            FAILED_SCREENSHOTS_DIR_PATH, EXPECTED_SCREENSHOTS_DIR_PATH, DIFFERENCE_SCREENSHOTS_DIR_PATH, TEMP_SCREENSHOTS_DIR_PATH);
 
     //API Related Constants
     public static final String CONTENT_TYPE_JSON_CHARSET_UTF8 = "application/json;charset=utf-8";

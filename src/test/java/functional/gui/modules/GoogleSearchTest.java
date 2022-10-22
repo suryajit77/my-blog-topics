@@ -33,6 +33,6 @@ public class GoogleSearchTest extends BaseTest {
     public void verifyComponentWithIncorrectImage() {
 
         AssertSnapshot.assertThat(takeWebElementScreenshot(googlePage.getGoogleSearchComponent()))
-                .matchesWithSnapshot("GoogleSearchComponentIncorrect.png.png");
+                .matchesWithSnapshot("GoogleSearchComponentIncorrect.png");
     }
 }
