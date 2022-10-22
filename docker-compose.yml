@@ -35,5 +35,4 @@ services:
       - HUB_HOST=hub
       - MODULE=testng.xml
     volumes:
-      - ./src/test/resources/results:/app
       - ./allure-results:/app
