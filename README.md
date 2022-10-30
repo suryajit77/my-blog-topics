@@ -44,7 +44,7 @@ Go to root directory and open any CLI and run the below command.
 18. Visual Assertion in UI Tests ![](doc/check-mark.png)  
     **_https://medium.com/@suryajit7/visual-assertions-in-ui-tests-c17d8544acb1_**
 
-## **Credits & Links:**
+## **References:**
 
 1. SpecBuilder class: Omprakash Chavan **_https://www.udemy.com/course/rest-assured-api-automation/_** 
 2. Use of Awaitility: Baeldung **_https://www.baeldung.com/awaitility-testing_**
